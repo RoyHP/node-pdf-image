@@ -137,7 +137,14 @@ PDFImage.prototype = {
             pdfImage.convertPage(i).then(function(imagePath){
               imagePaths.push(imagePath);
               if (imagePaths.length === parseInt(totalPages)){
-                imagePaths.sort(); //because of asyc pages we have to reSort pages
+                // Ensure that filenames are sorted naturally (numerically)
+                imagePaths.sort(function (a,b) {
+                  a = a.split('-')
+                  a = a[a.length - 1].split('.')[0]
+                  b = b.split('-')
+                  b = b[b.length - 1].split('.')[0]
+                  return a - b;
+                }); //because of asyc pages we have to reSort pages
                 resolve(imagePaths);
               }
             }).catch(function(error){
